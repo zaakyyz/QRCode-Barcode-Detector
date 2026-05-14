@@ -1,5 +1,3 @@
-"""Compatibility script for authorization mode."""
-
 import sys
 from pathlib import Path
 

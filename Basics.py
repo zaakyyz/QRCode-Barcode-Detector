@@ -1,5 +1,3 @@
-"""Compatibility script for basic mode."""
-
 import sys
 from pathlib import Path
 
