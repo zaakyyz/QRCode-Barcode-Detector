@@ -1,0 +1,21 @@
+[project]
+name = "project-n2-qrcode"
+version = "0.1.0"
+description = "Detect QR code and barcode using OpenCV and pyzbar"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "opencv-python==4.10.0.84",
+    "numpy==1.26.4",
+    "pyzbar==0.1.8",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
