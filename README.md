@@ -42,17 +42,10 @@ Pastikan **3 hal** ini sudah terpasang di laptop kamu sebelum menjalankan projec
 
 ```text
 Project_N2_QRCode/
-├── Basics.py
-├── Project.py
-├── pyproject.toml
-├── requirements.txt
-├── data/
-│   └── authorized_codes.txt
-└── src/
-    └── qr_barcode_detector/
-        ├── __init__.py
-        ├── authorization.py
-        └── scanner.py
+├── QrBarTest.py
+├── QrCodeProject.py
+├── myDataFile.text
+└── requirements.txt
 ```
 
 ---
@@ -95,25 +88,22 @@ Project_N2_QRCode/
 
 ### 1) Basic detector (tampil nilai kode asli)
 ```powershell
-python Basics.py
+python QrBarTest.py
 ```
 
 ### 2) Authorization detector (Authorized / Un-Authorized)
 ```powershell
-python Project.py
+python QrCodeProject.py
 ```
 
-Tekan tombol **`q`** di window kamera untuk keluar.
+Tekan `Ctrl+C` di terminal untuk keluar (atau tutup paksa window python).
 
 ---
 
 ## Customize
 
-- Edit daftar code valid di `data/authorized_codes.txt` (satu code per baris, tanpa tanda kutip).
-- Ganti resolusi atau indeks kamera: ubah argumen `run_realtime_scanner(...)` di `Basics.py` / `Project.py`, contoh:
-  ```python
-  run_realtime_scanner(width=1280, height=720, camera_index=1)
-  ```
+- Edit daftar code valid di `myDataFile.text` (satu code per baris, tanpa tanda kutip).
+- Ganti resolusi atau indeks kamera: ubah pada script `QrBarTest.py` / `QrCodeProject.py` di bagian `cv2.VideoCapture(0)`. Ubah `0` menjadi `1` atau index lainnya jika ada lebih dari 1 kamera.
 
 ---
 
@@ -150,19 +140,18 @@ Pesan: `running scripts is disabled on this system`.
 
 ### 5. Kamera tidak terbuka / window hitam
 - Tutup aplikasi lain yang mungkin pakai webcam (Zoom, OBS, browser, dll).
-- Coba index kamera lain dengan mengubah `camera_index=1` di `Basics.py` / `Project.py`.
+- Coba index kamera lain dengan mengubah `cv2.VideoCapture(0)` menjadi `cv2.VideoCapture(1)` di `QrBarTest.py` / `QrCodeProject.py`.
 
 ### 6. Selalu `Un-Authorized` walau kode sudah didaftarkan
-- Pastikan teks di `data/authorized_codes.txt` **persis sama** dengan hasil scan (tanpa tanda kutip, tanpa spasi tambahan di awal/akhir).
-- Jalankan `python Basics.py` untuk melihat nilai asli yang terbaca, baru paste ke `authorized_codes.txt`.
+- Pastikan teks di `myDataFile.text` **persis sama** dengan hasil scan (tanpa tanda kutip, tanpa spasi tambahan di awal/akhir).
+- Jalankan `python QrBarTest.py` untuk melihat nilai asli yang terbaca, baru paste ke `myDataFile.text`.
 
 ---
 
 ## Notes for Assignment
 
-- `Basics.py`: versi deteksi standar (sesuai script tutorial).
-- `Project.py`: versi validasi authorization (sesuai script tutorial).
-- `src/qr_barcode_detector/`: refactor best practice (modular, reusable).
+- `QrBarTest.py`: versi deteksi standar (menampilkan nilai kode asli).
+- `QrCodeProject.py`: versi validasi authorization (Authorized / Un-Authorized).
 - Untuk demo, siapkan **dua QR/barcode**:
-  - 1 berisi nilai yang sudah ada di `authorized_codes.txt` → akan jadi hijau **Authorized**.
+  - 1 berisi nilai yang sudah ada di `myDataFile.text` → akan jadi hijau **Authorized**.
   - 1 berisi nilai acak / tidak terdaftar → akan jadi merah **Un-Authorized**.
