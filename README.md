@@ -1,4 +1,4 @@
-# How to Detect QRCode and BarCode using OpenCV in Python
+# QR Code and Barcode Detection with OpenCV
 
 Project ini mendeteksi QR code dan barcode secara real-time dari webcam menggunakan:
 - `opencv-python` untuk akses kamera dan visualisasi
@@ -6,35 +6,45 @@ Project ini mendeteksi QR code dan barcode secara real-time dari webcam mengguna
 - `numpy` untuk manipulasi titik poligon
 
 > Tested on: **Windows 10/11 + Python 3.11.9**.
-> Versi Python lain (3.12 / 3.13 / 3.14) bisa menimbulkan error DLL `libzbar` di Windows, jadi **gunakan Python 3.11**.
+> Versi Python lain seperti 3.12, 3.13, atau 3.14 bisa menimbulkan error DLL `libzbar` di Windows, jadi disarankan menggunakan **Python 3.11**.
 
 ---
 
-## Prerequisites (Windows)
+## Prerequisites
 
-Pastikan **3 hal** ini sudah terpasang di laptop kamu sebelum menjalankan project:
+Pastikan komponen berikut sudah terpasang sebelum menjalankan project:
 
 1. **Python 3.11.x (64-bit)**
-   - Cara paling gampang lewat PowerShell:
-     ```powershell
-     winget install Python.Python.3.11
-     ```
-     Setelah selesai, **tutup dan buka ulang PowerShell** supaya PATH baru terbaca.
-   - Alternatif manual via installer: <https://www.python.org/downloads/release/python-3119/>
-     (saat install, **centang** `Add Python 3.11 to PATH`).
-   - Verifikasi:
-     ```powershell
-     py -0p
-     ```
-     Harus muncul `3.11`.
 
-2. **Microsoft Visual C++ 2013 Redistributable (x64)** — paling sering jadi penyebab error `libzbar-64.dll`.
-   - Download: <https://aka.ms/highdpimfc2013x64enu>
+   Install lewat PowerShell:
+   ```powershell
+   winget install Python.Python.3.11
+   ```
 
-3. **Microsoft Visual C++ 2015–2022 Redistributable (x64)**
-   - Download: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
+   Setelah selesai, tutup dan buka ulang PowerShell supaya PATH baru terbaca.
 
-> Setelah install ketiganya, **restart laptop** sekali agar runtime DLL terbaca dengan benar.
+   Alternatif manual: <https://www.python.org/downloads/release/python-3119/>
+
+   Saat install manual, centang `Add Python 3.11 to PATH`.
+
+   Verifikasi:
+   ```powershell
+   py -0p
+   ```
+
+   Pastikan ada Python `3.11` yang terdeteksi.
+
+2. **Microsoft Visual C++ 2013 Redistributable (x64)**
+
+   Download: <https://aka.ms/highdpimfc2013x64enu>
+
+   Komponen ini sering dibutuhkan oleh `pyzbar` untuk membaca `libzbar-64.dll`.
+
+3. **Microsoft Visual C++ 2015-2022 Redistributable (x64)**
+
+   Download: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
+
+Setelah install komponen di atas, restart laptop agar runtime DLL terbaca dengan benar.
 
 ---
 
@@ -42,116 +52,150 @@ Pastikan **3 hal** ini sudah terpasang di laptop kamu sebelum menjalankan projec
 
 ```text
 Project_N2_QRCode/
-├── QrBarTest.py
-├── QrCodeProject.py
-├── myDataFile.text
-└── requirements.txt
++-- QrBarTest.py
++-- QrCodeProject.py
++-- myDataFile.text
++-- requirements.txt
++-- README.md
 ```
 
 ---
 
 ## Setup
 
-> Pastikan kamu sudah menyelesaikan bagian **Prerequisites** di atas.
-
-1. Clone / copy project ke folder yang **tidak terlalu dalam** (hindari banyak spasi/karakter aneh kalau bisa).
-
-2. Buka PowerShell di folder project, lalu buat virtual environment pakai **Python 3.11**:
+1. Buka PowerShell di folder project, lalu buat virtual environment menggunakan Python 3.11:
    ```powershell
    py -3.11 -m venv .venv311
    ```
 
-3. Aktifkan virtual environment:
+2. Aktifkan virtual environment:
    ```powershell
    .\.venv311\Scripts\Activate.ps1
    ```
-   Pastikan keluar `(.venv311)` di awal prompt. Cek versi Python:
+
+   Pastikan muncul `(.venv311)` di awal prompt. Cek versi Python:
    ```powershell
    python -V
    ```
-   Harus menampilkan `Python 3.11.x`.
 
-4. Install dependency:
+   Output harus menampilkan `Python 3.11.x`.
+
+3. Install dependency:
    ```powershell
    pip install -r requirements.txt
    ```
 
-5. Smoke test, pastikan `pyzbar` bisa di-load:
+4. Smoke test untuk memastikan `pyzbar` bisa di-load:
    ```powershell
    python -c "from pyzbar.pyzbar import decode; print('pyzbar OK')"
    ```
-   Kalau muncul `pyzbar OK`, environment kamu siap. Kalau error, lihat bagian **Troubleshooting**.
+
+   Kalau muncul `pyzbar OK`, environment sudah siap. Kalau error, lihat bagian **Troubleshooting**.
 
 ---
 
 ## Run
 
-### 1) Basic detector (tampil nilai kode asli)
+### Basic detector
+
+Menampilkan nilai asli QR code atau barcode yang terbaca.
+
 ```powershell
 python QrBarTest.py
 ```
 
-### 2) Authorization detector (Authorized / Un-Authorized)
+### Authorization detector
+
+Menampilkan status `Authorized` atau `Un-Authorized` berdasarkan daftar kode valid di `myDataFile.text`.
+
 ```powershell
 python QrCodeProject.py
 ```
 
-Tekan `Ctrl+C` di terminal untuk keluar (atau tutup paksa window python).
+Tekan `q` atau `Esc` untuk keluar dari window kamera.
 
 ---
 
 ## Customize
 
-- Edit daftar code valid di `myDataFile.text` (satu code per baris, tanpa tanda kutip).
-- Ganti resolusi atau indeks kamera: ubah pada script `QrBarTest.py` / `QrCodeProject.py` di bagian `cv2.VideoCapture(0)`. Ubah `0` menjadi `1` atau index lainnya jika ada lebih dari 1 kamera.
+- Edit daftar kode valid di `myDataFile.text`.
+- Isi satu kode per baris, tanpa tanda kutip.
+- Jika ada lebih dari satu kamera, ubah `cv2.VideoCapture(0)` menjadi `cv2.VideoCapture(1)` atau index kamera lain di `QrBarTest.py` / `QrCodeProject.py`.
+- Resolusi kamera dapat diubah pada bagian:
+  ```python
+  cap.set(3, 640)
+  cap.set(4, 480)
+  ```
 
 ---
 
-## Troubleshooting (Windows)
+## Troubleshooting
 
-### 1. `FileNotFoundError: Could not find module 'libzbar-64.dll' (or one of its dependencies)`
-Penyebab: VC++ runtime belum lengkap.
-- Pastikan **VC++ 2013 (x64)** sudah terpasang: <https://aka.ms/highdpimfc2013x64enu>
-- Pastikan **VC++ 2015–2022 (x64)** juga terpasang: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
-- Restart laptop, ulangi smoke test.
+### 1. `FileNotFoundError: Could not find module 'libzbar-64.dll'`
 
-### 2. `No suitable Python runtime found` saat `py -3.11 -m venv ...`
-Python 3.11 belum terpasang.
-- Install paling cepat lewat PowerShell:
+Penyebab paling umum: VC++ runtime belum lengkap.
+
+- Install VC++ 2013 (x64): <https://aka.ms/highdpimfc2013x64enu>
+- Install VC++ 2015-2022 (x64): <https://aka.ms/vs/17/release/vc_redist.x64.exe>
+- Restart laptop, lalu ulangi smoke test.
+
+### 2. `No suitable Python runtime found`
+
+Error ini biasanya muncul saat menjalankan:
+
+```powershell
+py -3.11 -m venv .venv311
+```
+
+Artinya Python 3.11 belum terpasang atau belum terdeteksi oleh launcher Python.
+
+- Install lewat PowerShell:
   ```powershell
   winget install Python.Python.3.11
   ```
-  Tutup & buka ulang PowerShell setelah install selesai.
-- Alternatif: installer manual <https://www.python.org/downloads/release/python-3119/> (centang *Add Python 3.11 to PATH*).
-- Cek interpreter yang terdeteksi: `py -0p`.
+- Tutup dan buka ulang PowerShell.
+- Cek interpreter yang terdeteksi:
+  ```powershell
+  py -0p
+  ```
 
 ### 3. `ModuleNotFoundError: No module named 'pyzbar'`
-Virtual environment belum aktif atau `pip install` belum dijalankan.
-- Aktifkan dulu: `.\.venv311\Scripts\Activate.ps1`
-- Lalu: `pip install -r requirements.txt`
+
+Virtual environment belum aktif atau dependency belum di-install.
+
+```powershell
+.\.venv311\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
 
 ### 4. PowerShell menolak menjalankan `Activate.ps1`
-Pesan: `running scripts is disabled on this system`.
-- Buka PowerShell **Run as Administrator**, jalankan:
-  ```powershell
-  Set-ExecutionPolicy RemoteSigned
-  ```
-- Pilih `Y`, lalu ulang aktivasi venv.
 
-### 5. Kamera tidak terbuka / window hitam
-- Tutup aplikasi lain yang mungkin pakai webcam (Zoom, OBS, browser, dll).
-- Coba index kamera lain dengan mengubah `cv2.VideoCapture(0)` menjadi `cv2.VideoCapture(1)` di `QrBarTest.py` / `QrCodeProject.py`.
+Jika muncul pesan `running scripts is disabled on this system`, buka PowerShell dengan **Run as Administrator**, lalu jalankan:
 
-### 6. Selalu `Un-Authorized` walau kode sudah didaftarkan
-- Pastikan teks di `myDataFile.text` **persis sama** dengan hasil scan (tanpa tanda kutip, tanpa spasi tambahan di awal/akhir).
-- Jalankan `python QrBarTest.py` untuk melihat nilai asli yang terbaca, baru paste ke `myDataFile.text`.
+```powershell
+Set-ExecutionPolicy RemoteSigned
+```
+
+Pilih `Y`, lalu aktifkan ulang virtual environment.
+
+### 5. Kamera tidak terbuka atau window hitam
+
+- Tutup aplikasi lain yang sedang memakai webcam, seperti Zoom, OBS, browser, atau aplikasi meeting.
+- Coba ubah index kamera dari `0` menjadi `1` di `cv2.VideoCapture(0)`.
+
+### 6. Selalu `Un-Authorized` walaupun kode sudah didaftarkan
+
+- Pastikan teks di `myDataFile.text` persis sama dengan hasil scan.
+- Jangan tambahkan tanda kutip.
+- Jangan tambahkan spasi di awal atau akhir kode.
+- Jalankan `python QrBarTest.py` untuk melihat nilai asli yang terbaca, lalu masukkan nilai tersebut ke `myDataFile.text`.
 
 ---
 
 ## Notes for Assignment
 
-- `QrBarTest.py`: versi deteksi standar (menampilkan nilai kode asli).
-- `QrCodeProject.py`: versi validasi authorization (Authorized / Un-Authorized).
-- Untuk demo, siapkan **dua QR/barcode**:
-  - 1 berisi nilai yang sudah ada di `myDataFile.text` → akan jadi hijau **Authorized**.
-  - 1 berisi nilai acak / tidak terdaftar → akan jadi merah **Un-Authorized**.
+- `QrBarTest.py`: versi deteksi standar yang menampilkan nilai kode asli.
+- `QrCodeProject.py`: versi validasi authorization yang menampilkan `Authorized` atau `Un-Authorized`.
+- Untuk demo, siapkan dua QR/barcode:
+  - satu berisi nilai yang sudah ada di `myDataFile.text`, hasilnya hijau `Authorized`
+  - satu berisi nilai acak atau tidak terdaftar, hasilnya merah `Un-Authorized`
