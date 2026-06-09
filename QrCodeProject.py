@@ -16,6 +16,10 @@ def draw_barcode_boundary(img, barcode, color):
     return x, y
 
 
+def get_label_position(x, y):
+    return x, max(y - 10, 30)
+
+
 #img = cv2.imread('1.png')
 cap = cv2.VideoCapture(0)
 cap.set(3,640)
@@ -39,7 +43,7 @@ while True:
             myColor = (0, 0, 255)
 
         x, y = draw_barcode_boundary(img, barcode, myColor)
-        cv2.putText(img,myOutput,(x,y),cv2.FONT_HERSHEY_SIMPLEX,
+        cv2.putText(img,myOutput,get_label_position(x, y),cv2.FONT_HERSHEY_SIMPLEX,
                     0.9,myColor,2)
 
     cv2.imshow('Result',img)
