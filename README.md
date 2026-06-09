@@ -48,19 +48,6 @@ Setelah install komponen di atas, restart laptop agar runtime DLL terbaca dengan
 
 ---
 
-## Project Structure
-
-```text
-Project_N2_QRCode/
-+-- QrBarTest.py
-+-- QrCodeProject.py
-+-- myDataFile.text
-+-- requirements.txt
-+-- README.md
-```
-
----
-
 ## Setup
 
 1. Buka PowerShell di folder project, lalu buat virtual environment menggunakan Python 3.11:
