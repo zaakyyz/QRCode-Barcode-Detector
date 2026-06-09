@@ -20,6 +20,10 @@ def get_label_position(x, y):
     return x, max(y - 10, 30)
 
 
+def clean_decoded_data(data):
+    return data.decode('utf-8').strip()
+
+
 #img = cv2.imread('1.png')
 cap = cv2.VideoCapture(0)
 cap.set(3,640)
@@ -32,7 +36,7 @@ while True:
 
     success, img = cap.read()
     for barcode in decode(img):
-        myData = barcode.data.decode('utf-8')
+        myData = clean_decoded_data(barcode.data)
         print(myData)
 
         if myData in myDataList:
